@@ -179,15 +179,20 @@ int main()
 	}
 
 	cont = 0;
+	for (int i = 0; i < contRecipes; i++)
+	{
+		printf("\t     %.*s", 8, recipes[i].name);
+	}
+
 	for (int i = 0; i < numIng * contRecipes; i++)
 	{
 		if (i % contRecipes == 0)
 		{
-			printf("\n%s\t", ingArr[cont]);
+			printf("\n%s\t\t", ingArr[cont]);
 
 			cont++;
 		}
-		printf("%d\t", *(mat + i));
+		printf("%d\t\t", *(mat + i));
 	}
 
 	printf("\n");

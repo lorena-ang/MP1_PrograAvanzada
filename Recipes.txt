@@ -26,6 +26,6 @@ Categories:Refresher
 Profile:Sweet
 Ingredients:
 Water:70
-Syrup:10
-Strawberry:10
-Raspberry:10
+Coffee:10
+Cream:10
+Orange:10

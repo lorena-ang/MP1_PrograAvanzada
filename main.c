@@ -2,6 +2,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 
 FILE *ptrFile;
 char chr;
@@ -33,6 +34,33 @@ int all_space(const char *str)
 		}
 	}
 	return 1;
+}
+
+// Cálculo de la distancia euclidiana para la matriz de comparaciones.
+double euclidean_distance(int *mat, int contRecipes, int numIng, int p, int q) {
+    int *recipeA = malloc(numIng*sizeof(int));
+    int *recipeB = malloc(numIng*sizeof(int));
+    int sum = 0;
+    double eDistance;
+
+    // Ingredientes de la receta A.
+    for(int i = 0; i < numIng; i++){
+        *(recipeA + i) = *(mat+p+(i*contRecipes));
+    }
+
+    // Ingredientes de la receta B.
+    for(int i = 0; i < numIng; i++){
+        *(recipeB + i) = *(mat+q+(i*contRecipes));
+    }
+
+    // Raíz cuadrada de la sumatoria de las diferencias al cuadrado entre los ingredientes de las recetas A y B.
+    for(int i = 0; i<numIng; i++) {
+        sum += pow(*(recipeA+i) - *(recipeB+i),2);
+    }
+    eDistance = sqrt(sum);
+
+    // Retorna la distancia euclidiana.
+    return eDistance;
 }
 
 int main()
@@ -195,6 +223,36 @@ int main()
 		printf("%d\t\t", *(mat + i));
 	}
 
-	printf("\n");
+		printf("\n\n");
+
+    // PAIRWISE COMPARISONS
+    // Creación de matriz para almacenar las comparaciones.
+    double *matComparisons;
+    matComparisons = (double *)malloc(contRecipes * contRecipes * sizeof(double));
+
+    // Población de matriz de comparación.
+    for (int i=0; i < contRecipes; i++) {
+        for (int j=0; j < contRecipes; j++) {
+            *(matComparisons+j+(i*contRecipes)) = euclidean_distance(mat, contRecipes, numIng, i, j);
+        }
+    }
+
+    // Impresión de matriz de comparación.
+    printf("Pairwise Comparisons\n");
+    for (int i = 0; i < contRecipes; i++) {
+		printf("\t     %.*s", 8, recipes[i].name);
+	}
+    printf("\n");
+
+    for (int i = 0; i < contRecipes; i++) {
+        printf("%.*s", 8, recipes[i].name);
+        for(int j = 0; j < contRecipes; j++) {
+            // printf("%f", *(matComparisons+j+(i*contRecipes)));
+            printf("\t%.0f\t", *(matComparisons+j+(i*contRecipes)));
+        }
+        printf("\n");
+    }
+    printf("\n");
+
 	return 0;
 }

@@ -264,23 +264,19 @@ int main()
 
 	// Impresión de matriz de comparación.
 	printf("Pairwise Comparisons\n");
-	for (int i = 0; i < contRecipes; i++)
-	{
+    for (int i = 0; i < contRecipes; i++) {
 		printf("\t     %.*s", 8, recipes[i].name);
 	}
-	printf("\n");
+    printf("\n");
 
-	for (int i = 0; i < contRecipes; i++)
-	{
-		printf("%.*s", 8, recipes[i].name);
-		for (int j = 0; j < contRecipes; j++)
-		{
-			// printf("%f", *(matComparisons+j+(i*contRecipes)));
-			printf("\t%.0f\t", *(matComparisons + j + (i * contRecipes)));
-		}
-		printf("\n");
-	}
-	printf("\n");
+    for (int i = 0; i < contRecipes; i++) {
+        printf("%.*s", 8, recipes[i].name);
+        for(int j = 0; j < contRecipes; j++) {
+            printf("%*.0f\t", 10, *(matComparisons+j+(i*contRecipes)));
+        }
+        printf("\n");
+    }
+    printf("\n");
 
 	// EDGE NOTATION
 	int sizeMat = ((contRecipes * contRecipes) - contRecipes) / 2;

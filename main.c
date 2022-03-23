@@ -37,40 +37,48 @@ int all_space(const char *str)
 }
 
 // Cálculo de la distancia euclidiana para la matriz de comparaciones.
-double euclidean_distance(int *mat, int contRecipes, int numIng, int p, int q) {
-    int *recipeA = malloc(numIng*sizeof(int));
-    int *recipeB = malloc(numIng*sizeof(int));
-    int sum = 0;
-    double eDistance;
+double euclidean_distance(int *mat, int contRecipes, int numIng, int p, int q)
+{
+	int *recipeA = malloc(numIng * sizeof(int));
+	int *recipeB = malloc(numIng * sizeof(int));
+	int sum = 0;
+	double eDistance;
 
-    // Ingredientes de la receta A.
-    for(int i = 0; i < numIng; i++){
-        *(recipeA + i) = *(mat+p+(i*contRecipes));
-    }
+	// Ingredientes de la receta A.
+	for (int i = 0; i < numIng; i++)
+	{
+		*(recipeA + i) = *(mat + p + (i * contRecipes));
+	}
 
-    // Ingredientes de la receta B.
-    for(int i = 0; i < numIng; i++){
-        *(recipeB + i) = *(mat+q+(i*contRecipes));
-    }
+	// Ingredientes de la receta B.
+	for (int i = 0; i < numIng; i++)
+	{
+		*(recipeB + i) = *(mat + q + (i * contRecipes));
+	}
 
-    // Raíz cuadrada de la sumatoria de las diferencias al cuadrado entre los ingredientes de las recetas A y B.
-    for(int i = 0; i<numIng; i++) {
-        sum += pow(*(recipeA+i) - *(recipeB+i),2);
-    }
-    eDistance = sqrt(sum);
+	// Raíz cuadrada de la sumatoria de las diferencias al cuadrado entre los ingredientes de las recetas A y B.
+	for (int i = 0; i < numIng; i++)
+	{
+		sum += pow(*(recipeA + i) - *(recipeB + i), 2);
+	}
+	eDistance = sqrt(sum);
 
-    // Retorna la distancia euclidiana.
-    return eDistance;
+	// Retorna la distancia euclidiana.
+	return eDistance;
 }
 
-void getLowercase(char *s) {
-	while (*s!='\0') {
-		if (*s == '\r' || *s == '\n') {
+void getLowercase(char *s)
+{
+	while (*s != '\0')
+	{
+		if (*s == '\r' || *s == '\n')
+		{
 			*s = '\0';
 			break;
 		}
 		// Es mayúscula
-		if (*s>='A' && *s<='Z') {
+		if (*s >= 'A' && *s <= 'Z')
+		{
 			*s = tolower(*s);
 		}
 		// Mover a siguiente caracter
@@ -238,73 +246,81 @@ int main()
 		printf("%d\t\t", *(mat + i));
 	}
 
-		printf("\n\n");
+	printf("\n\n");
 
-    // PAIRWISE COMPARISONS
-    // Creación de matriz para almacenar las comparaciones.
-    double *matComparisons;
-    matComparisons = (double *)malloc(contRecipes * contRecipes * sizeof(double));
+	// PAIRWISE COMPARISONS
+	// Creación de matriz para almacenar las comparaciones.
+	double *matComparisons;
+	matComparisons = (double *)malloc(contRecipes * contRecipes * sizeof(double));
 
-    // Población de matriz de comparación.
-    for (int i=0; i < contRecipes; i++) {
-        for (int j=0; j < contRecipes; j++) {
-            *(matComparisons+j+(i*contRecipes)) = euclidean_distance(mat, contRecipes, numIng, i, j);
-        }
-    }
+	// Población de matriz de comparación.
+	for (int i = 0; i < contRecipes; i++)
+	{
+		for (int j = 0; j < contRecipes; j++)
+		{
+			*(matComparisons + j + (i * contRecipes)) = euclidean_distance(mat, contRecipes, numIng, i, j);
+		}
+	}
 
-    // Impresión de matriz de comparación.
-    printf("Pairwise Comparisons\n");
-    for (int i = 0; i < contRecipes; i++) {
+	// Impresión de matriz de comparación.
+	printf("Pairwise Comparisons\n");
+	for (int i = 0; i < contRecipes; i++)
+	{
 		printf("\t     %.*s", 8, recipes[i].name);
 	}
-    printf("\n");
+	printf("\n");
 
-    for (int i = 0; i < contRecipes; i++) {
-        printf("%.*s", 8, recipes[i].name);
-        for(int j = 0; j < contRecipes; j++) {
-            // printf("%f", *(matComparisons+j+(i*contRecipes)));
-            printf("\t%.0f\t", *(matComparisons+j+(i*contRecipes)));
-        }
-        printf("\n");
-    }
-    printf("\n");
+	for (int i = 0; i < contRecipes; i++)
+	{
+		printf("%.*s", 8, recipes[i].name);
+		for (int j = 0; j < contRecipes; j++)
+		{
+			// printf("%f", *(matComparisons+j+(i*contRecipes)));
+			printf("\t%.0f\t", *(matComparisons + j + (i * contRecipes)));
+		}
+		printf("\n");
+	}
+	printf("\n");
 
 	// EDGE NOTATION
 	int sizeMat = ((contRecipes * contRecipes) - contRecipes) / 2;
-	
+
 	// Abrir archivo
 	ptrFile = fopen("Edges.txt", "w");
-	
+
 	// Si hay errores
 	if (ptrFile == NULL)
 	{
 		printf("Error opening the file %s", "Edges.txt");
 		return -1;
 	}
-	
+
 	// Imprimir y exportar a .txt matriz de edge notation
 	printf("Edge Notation\n");
 	printf("From\tTo\t  Distance");
 	printf("\n");
-	for (int i = 0; i < contRecipes - 1; i++) {
-		for (int j = 1; j < contRecipes; j++) {
-			if (i != j) {
+	for (int i = 0; i < contRecipes - 1; i++)
+	{
+		for (int j = 1; j < contRecipes; j++)
+		{
+			if (i != j)
+			{
 				char *strFrom = &(recipes[i].name)[7];
 				getLowercase(strFrom);
 				char *strTo = &(recipes[j].name)[7];
 				getLowercase(strTo);
 				// Imprimir
 				printf("  %s\t\t %s", strFrom, strTo);
-				printf("\t\t %.0f", *(matComparisons+j+(i*contRecipes)));
+				printf("\t\t %.0f", *(matComparisons + j + (i * contRecipes)));
 				printf("\n");
 				// Exportar a archivo
-				fprintf(ptrFile, " %s %s", strFrom, strTo);
-				fprintf(ptrFile, " %.0f", *(matComparisons+j+(i*contRecipes)));
+				fprintf(ptrFile, "%s%s", strFrom, strTo);
+				fprintf(ptrFile, "%.0f", *(matComparisons + j + (i * contRecipes)));
 				fprintf(ptrFile, "\n");
 			}
 		}
 	}
-	
+
 	// Cerrar archivo
 	fclose(ptrFile);
 

@@ -63,6 +63,21 @@ double euclidean_distance(int *mat, int contRecipes, int numIng, int p, int q) {
     return eDistance;
 }
 
+void getLowercase(char *s) {
+	while (*s!='\0') {
+		if (*s == '\r' || *s == '\n') {
+			*s = '\0';
+			break;
+		}
+		// Es mayúscula
+		if (*s>='A' && *s<='Z') {
+			*s = tolower(*s);
+		}
+		// Mover a siguiente caracter
+		++s;
+	}
+}
+
 int main()
 {
 	struct _recipe recipes[50];
@@ -253,6 +268,28 @@ int main()
         printf("\n");
     }
     printf("\n");
+
+    // EDGE NOTATION
+	int sizeMat = ((contRecipes * contRecipes) - contRecipes) / 2;
+	 
+	// Imprimir matriz de edge notation
+	printf("Edge Notation\n");
+	printf("From\tTo\t  Distance");
+	printf("\n");
+	for (int i = 0; i < contRecipes - 1; i++) {
+		for (int j = 1; j < contRecipes; j++) {
+			if (i != j) {
+				char *strFrom = &(recipes[i].name)[7];
+				getLowercase(strFrom);
+				char *strTo = &(recipes[j].name)[7];
+				getLowercase(strTo);
+				//char *strDist = *(matComparisons+j+(i*contRecipes));
+				printf("  %s\t\t %s", strFrom, strTo);
+				printf("\t\t %.0f", *(matComparisons+j+(i*contRecipes)));
+				printf("\n");
+			}
+		}
+	}
 
 	return 0;
 }

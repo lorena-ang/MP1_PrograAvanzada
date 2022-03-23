@@ -269,10 +269,20 @@ int main()
     }
     printf("\n");
 
-    // EDGE NOTATION
+	// EDGE NOTATION
 	int sizeMat = ((contRecipes * contRecipes) - contRecipes) / 2;
-	 
-	// Imprimir matriz de edge notation
+	
+	// Abrir archivo
+	ptrFile = fopen("Edges.txt", "w");
+	
+	// Si hay errores
+	if (ptrFile == NULL)
+	{
+		printf("Error opening the file %s", "Edges.txt");
+		return -1;
+	}
+	
+	// Imprimir y exportar a .txt matriz de edge notation
 	printf("Edge Notation\n");
 	printf("From\tTo\t  Distance");
 	printf("\n");
@@ -283,13 +293,20 @@ int main()
 				getLowercase(strFrom);
 				char *strTo = &(recipes[j].name)[7];
 				getLowercase(strTo);
-				//char *strDist = *(matComparisons+j+(i*contRecipes));
+				// Imprimir
 				printf("  %s\t\t %s", strFrom, strTo);
 				printf("\t\t %.0f", *(matComparisons+j+(i*contRecipes)));
 				printf("\n");
+				// Exportar a archivo
+				fprintf(ptrFile, " %s %s", strFrom, strTo);
+				fprintf(ptrFile, " %.0f", *(matComparisons+j+(i*contRecipes)));
+				fprintf(ptrFile, "\n");
 			}
 		}
 	}
+	
+	// Cerrar archivo
+	fclose(ptrFile);
 
 	return 0;
 }

@@ -164,7 +164,7 @@ int main()
 		printf("Unable to open file.\n");
 	}
 
-	printf("----------------------\n");
+	printf("--------------------------------------------------------------\n");
 	int maxIng = 0;
 	contRecipes++;
 	for (int i = 0; i < contRecipes; i++)
@@ -179,7 +179,7 @@ int main()
 		{
 			printf("\t%s: %d\n", recipes[i].list[j].name, recipes[i].list[j].quantity);
 		}
-		printf("----------------------\n");
+		printf("--------------------------------------------------------------\n");
 	}
 
 	char ingArr[50][maxIng];
@@ -229,6 +229,7 @@ int main()
 		}
 	}
 
+	printf("Formula matrix\n");
 	cont = 0;
 	for (int i = 0; i < contRecipes; i++)
 	{
@@ -293,7 +294,7 @@ int main()
 
 	// Imprimir y exportar a .txt matriz de edge notation
 	printf("Edge Notation\n");
-	printf("From\tTo\t  Distance");
+	printf("From\tTo\tDistance");
 	printf("\n");
 	for (int i = 0; i < contRecipes - 1; i++)
 	{
@@ -306,8 +307,8 @@ int main()
 				char *strTo = &(recipes[j].name)[7];
 				getLowercase(strTo);
 				// Imprimir
-				printf("  %s\t\t %s", strFrom, strTo);
-				printf("\t\t %.0f", *(matComparisons + j + (i * contRecipes)));
+				printf("  %s      %s", strFrom, strTo);
+				printf("\t   %.0f", *(matComparisons + j + (i * contRecipes)));
 				printf("\n");
 				// Exportar a archivo
 				fprintf(ptrFile, "%s%s", strFrom, strTo);
@@ -316,7 +317,6 @@ int main()
 			}
 		}
 	}
-
 	// Cerrar archivo
 	fclose(ptrFile);
 

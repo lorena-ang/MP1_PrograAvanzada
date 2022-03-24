@@ -27,5 +27,34 @@ Profile:Sweet
 Ingredients:
 Water:70
 Syrup:10
-Strawberry:10
+Strawberry:13
 Raspberry:10
+
+Recipe:Recipe D
+Description:This is a desert that...
+Categories:Desert
+Profile:Sweet
+Ingredients:
+Olive Oil:70
+Syrup:10
+Carrot:10
+Eggs:10
+
+Recipe:Recipe E
+Description:This is something that...
+Categories:Something
+Profile:Sweet
+Ingredients:
+Water: 3
+Olive Oil:70
+Syrup:10
+Carrot:14
+Eggs:10
+
+
+
+
+
+
+
+

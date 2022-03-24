@@ -16,6 +16,7 @@ struct _ingredients
 
 struct _recipe
 {
+	char id;
 	char name[50];
 	char decription[500];
 	char categories[500];
@@ -67,29 +68,11 @@ double euclidean_distance(int *mat, int contRecipes, int numIng, int p, int q)
 	return eDistance;
 }
 
-void getLowercase(char *s)
-{
-	while (*s != '\0')
-	{
-		if (*s == '\r' || *s == '\n')
-		{
-			*s = '\0';
-			break;
-		}
-		// Es mayúscula
-		if (*s >= 'A' && *s <= 'Z')
-		{
-			*s = tolower(*s);
-		}
-		// Mover a siguiente caracter
-		++s;
-	}
-}
-
 int main()
 {
 	struct _recipe recipes[50];
-	int contRecipes = 0;
+	int contRecipes = -1;
+	char idChar = 'a';
 
 	ptrFile = fopen("Recipes.txt", "r");
 	if (ptrFile != NULL)
@@ -110,7 +93,7 @@ int main()
 				{
 					state = 0;
 					numIng = 0;
-					contRecipes++;
+					idChar++;
 				}
 				else
 				{
@@ -119,6 +102,8 @@ int main()
 					switch (state)
 					{
 					case 0:
+						contRecipes++;
+						recipes[contRecipes].id = idChar;
 						strcpy(recipes[contRecipes].name, res);
 						state++;
 						break;
@@ -164,11 +149,14 @@ int main()
 		printf("Unable to open file.\n");
 	}
 
-	printf("--------------------------------------------------------------\n");
+	printf("---------------------------------------------------------------------\n");
+	printf("Recipes\n\n");
 	int maxIng = 0;
 	contRecipes++;
 	for (int i = 0; i < contRecipes; i++)
 	{
+		printf("*************************************\n");
+		printf("ID: %c\n", recipes[i].id);
 		printf("NAME: %s", recipes[i].name);
 		printf("DESCRIPTION: %s", recipes[i].decription);
 		printf("CATEGORIES: %s", recipes[i].categories);
@@ -179,7 +167,6 @@ int main()
 		{
 			printf("\t%s: %d\n", recipes[i].list[j].name, recipes[i].list[j].quantity);
 		}
-		printf("--------------------------------------------------------------\n");
 	}
 
 	char ingArr[50][maxIng];
@@ -229,7 +216,8 @@ int main()
 		}
 	}
 
-	printf("Formula matrix\n");
+	printf("---------------------------------------------------------------------\n");
+	printf("Formula matrix\n\n");
 	cont = 0;
 	for (int i = 0; i < contRecipes; i++)
 	{
@@ -240,7 +228,7 @@ int main()
 	{
 		if (i % contRecipes == 0)
 		{
-			printf("\n%s\t\t", ingArr[cont]);
+			printf("\n%.*s\t\t", 6, ingArr[cont]);
 
 			cont++;
 		}
@@ -264,20 +252,24 @@ int main()
 	}
 
 	// Impresión de matriz de comparación.
-	printf("Pairwise Comparisons\n");
-    for (int i = 0; i < contRecipes; i++) {
+	printf("---------------------------------------------------------------------\n");
+	printf("Pairwise Comparisons\n\n");
+	for (int i = 0; i < contRecipes; i++)
+	{
 		printf("\t     %.*s", 8, recipes[i].name);
 	}
-    printf("\n");
+	printf("\n");
 
-    for (int i = 0; i < contRecipes; i++) {
-        printf("%.*s", 8, recipes[i].name);
-        for(int j = 0; j < contRecipes; j++) {
-            printf("%*.0f\t", 10, *(matComparisons+j+(i*contRecipes)));
-        }
-        printf("\n");
-    }
-    printf("\n");
+	for (int i = 0; i < contRecipes; i++)
+	{
+		printf("%.*s", 8, recipes[i].name);
+		for (int j = 0; j < contRecipes; j++)
+		{
+			printf("%*.0f\t", 10, *(matComparisons + j + (i * contRecipes)));
+		}
+		printf("\n");
+	}
+	printf("\n");
 
 	// EDGE NOTATION
 	int sizeMat = ((contRecipes * contRecipes) - contRecipes) / 2;
@@ -293,25 +285,22 @@ int main()
 	}
 
 	// Imprimir y exportar a .txt matriz de edge notation
-	printf("Edge Notation\n");
+	printf("---------------------------------------------------------------------\n");
+	printf("Edge Notation\n\n");
 	printf("From\tTo\tDistance");
 	printf("\n");
-	for (int i = 0; i < contRecipes - 1; i++)
+	for (int i = 0; i < contRecipes; i++)
 	{
-		for (int j = 1; j < contRecipes; j++)
+		for (int j = i; j < contRecipes; j++)
 		{
 			if (i != j)
 			{
-				char *strFrom = &(recipes[i].name)[7];
-				getLowercase(strFrom);
-				char *strTo = &(recipes[j].name)[7];
-				getLowercase(strTo);
 				// Imprimir
-				printf("  %s      %s", strFrom, strTo);
+				printf("  %c      %c", recipes[i].id, recipes[j].id);
 				printf("\t   %.0f", *(matComparisons + j + (i * contRecipes)));
 				printf("\n");
 				// Exportar a archivo
-				fprintf(ptrFile, "%s%s", strFrom, strTo);
+				fprintf(ptrFile, "%c%c", recipes[i].id, recipes[j].id);
 				fprintf(ptrFile, "%.0f", *(matComparisons + j + (i * contRecipes)));
 				fprintf(ptrFile, "\n");
 			}
